@@ -1,72 +1,40 @@
 import React from 'react'
+import { Query } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import 'rbx/index.css'
-import { Panel, Control, Input, Icon, FontAwesomeIcon } from "rbx";
+import { List, Notification } from "rbx";
+
+const POKEMONS = gql`
+  {
+    pokemons(first: 10) {
+      id
+      name
+    }
+  }
+`
 
 export default function PokemonList() {
   return (
-    <Panel>
-      <Panel.Heading>repositories</Panel.Heading>
-      <Panel.Block>
-        <Control iconLeft>
-          <Input size="small" type="text" placeholder="search" />
-          <Icon size="small" align="left">
-            <FontAwesomeIcon icon={faSearch} />
-          </Icon>
-        </Control>
-      </Panel.Block>
-      <Panel.Tab.Group>
-        <Panel.Tab active>all</Panel.Tab>
-        <Panel.Tab>public</Panel.Tab>
-        <Panel.Tab>private</Panel.Tab>
-        <Panel.Tab>sources</Panel.Tab>
-        <Panel.Tab>forks</Panel.Tab>
-      </Panel.Tab.Group>
-      <Panel.Block as="a" active>
-        <Panel.Icon>
-          <FontAwesomeIcon icon={faBook} />
-        </Panel.Icon>
-        bulma
-  </Panel.Block>
-      <Panel.Block>
-        <Panel.Icon>
-          <FontAwesomeIcon icon={faBook} />
-        </Panel.Icon>
-        marksheet
-  </Panel.Block>
-      <Panel.Block>
-        <Panel.Icon>
-          <FontAwesomeIcon icon={faBook} />
-        </Panel.Icon>
-        minireset.css
-  </Panel.Block>
-      <Panel.Block>
-        <Panel.Icon>
-          <FontAwesomeIcon icon={faBook} />
-        </Panel.Icon>
-        jgthms.github.io
-  </Panel.Block>
-      <Panel.Block>
-        <Panel.Icon>
-          <FontAwesomeIcon icon={faCodeBranch} />
-        </Panel.Icon>
-        daniellowtw/infboard
-  </Panel.Block>
-      <Panel.Block>
-        <Panel.Icon>
-          <FontAwesomeIcon icon={faCodeBranch} />
-        </Panel.Icon>
-        mojs
-  </Panel.Block>
-      <Panel.Block as="label">
-        <Checkbox />
-        remember me
-  </Panel.Block>
-      <Panel.Block>
-        <Button fullwidth color="link" outlined>
-          reset all filters
-    </Button>
-      </Panel.Block>
-    </Panel>
+    <Query query={POKEMONS}>
+      {({ loading, error, data }) => {
+        if (loading) {
+          return (
+            <Notification color='warning'>Getting list of pokemons</Notification>
+          )
+        }
+        if (error) {
+          return (
+            <Notification color='danger'>An error has occured. Sorry pal.</Notification>
+          )
+        }
+        const pokemons = data.pokemons
+        return (
+          <List>
+            {pokemons.map(link => <List.Item key={link.id}>{link.name}</List.Item>)}
+          </List>
+        )
+      }}
+    </Query>
   )
 }

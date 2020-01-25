@@ -7,7 +7,7 @@ import { Content, Notification } from "rbx";
 function App() {
   return (
     <Content>
-      <Notification color='info'>
+      <Notification color='primary'>
         Search information on <strong>first generation</strong> Pokemons
       </Notification>
       <PokemonList />
