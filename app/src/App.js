@@ -1,5 +1,5 @@
 import React from 'react';
-import PokemonList from "./PokemonList";
+import PokemonList from "./components/PokemonList";
 
 import 'rbx/index.css'
 import { Content, Notification } from "rbx";
